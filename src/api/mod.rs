@@ -1,4 +1,5 @@
 mod health;
+mod create_pokemon;
 
 enum Status {
     BadRequest,
@@ -29,6 +30,9 @@ pub fn serve(url: &str) {
         router!(req,
             (GET) (/health) => {
                 health::serve()
+            },
+            (POST) (/) => {
+                create_pokemon::serve(req)
             },
             _ => {
                 rouille::Response::from(Status::NotFound)
