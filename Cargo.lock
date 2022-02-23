@@ -323,6 +323,8 @@ name = "pokedex"
 version = "0.1.0"
 dependencies = [
  "rouille",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -445,6 +447,9 @@ name = "serde"
 version = "1.0.136"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ce31e24b01e1e524df96f1c2fdd054405f8d7376249a5110886fb4b658484789"
+dependencies = [
+ "serde_derive",
+]
 
 [[package]]
 name = "serde_derive"
