@@ -18,7 +18,6 @@ impl From<PokemonNumber> for u16 {
         n.0
     }
 }
-
 #[derive(Clone)]
 pub struct PokemonName(String);
 
@@ -124,6 +123,13 @@ impl PokemonNumber {
 
     pub fn charmander() -> Self {
         Self(4)
+    }
+}
+
+#[cfg(test)]
+impl PokemonNumber {
+    pub fn bad() -> Self {
+        Self(0)
     }
 }
 

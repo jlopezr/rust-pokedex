@@ -2,9 +2,10 @@ use std::sync::Arc;
 
 use crate::repositories::pokemon::Repository;
 
-mod health;
 mod create_pokemon;
 mod fetch_all_pokemons;
+pub mod fetch_pokemon;
+mod health;
 
 enum Status {
     BadRequest,
@@ -39,9 +40,15 @@ pub fn serve(url: &str, repo: Arc<dyn Repository>) {
             (POST) (/) => {
                 create_pokemon::serve(repo.clone(), req) //Clones only the ARC pointer
             },
+            (GET) (/) => {
+                fetch_all_pokemons::serve(repo.clone())
+            },
+            (GET) (/{number: u16}) => {
+                fetch_pokemon::serve(repo.clone(), number)
+            },
             _ => {
                 rouille::Response::from(Status::NotFound)
-            }    
+            }
         )
     });
 }
