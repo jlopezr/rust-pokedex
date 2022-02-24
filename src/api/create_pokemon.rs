@@ -16,6 +16,8 @@ struct Request {
 #[derive(Serialize)]
 struct Response {
     number: u16,
+    name: String,
+    types: Vec<String>
 }
 
 pub fn serve(repo: Arc<dyn Repository>, req: &rouille::Request) -> rouille::Response {
@@ -28,9 +30,9 @@ pub fn serve(repo: Arc<dyn Repository>, req: &rouille::Request) -> rouille::Resp
         },
         _ => return rouille::Response::from(Status::BadRequest),
     };
-        
-    match create_pokemon::execute(repo, req) {
-        Ok(number) => rouille::Response::json(&Response { number }),
+             
+    match create_pokemon::execute(repo, req) {     
+        Ok(create_pokemon::Response { number, name, types}) => rouille::Response::json(&Response { number, name, types }),
         Err(Error::BadRequest) => rouille::Response::from(Status::BadRequest),
         Err(Error::Conflict) => rouille::Response::from(Status::Conflict),
         Err(Error::Unknown) => rouille::Response::from(Status::InternalServerError),

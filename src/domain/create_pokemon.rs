@@ -1,7 +1,8 @@
+use std::any::Any;
 use std::sync::Arc;
 
 use crate::domain::entities::{PokemonName, PokemonNumber, PokemonTypes};
-use crate::repositories::pokemon::{Repository, InsertError};
+use crate::repositories::pokemon::{InsertError, Repository};
 
 pub struct Request {
     pub number: u16,
@@ -9,13 +10,19 @@ pub struct Request {
     pub types: Vec<String>,
 }
 
-#[derive(Debug)]
-#[derive(PartialEq)]
+/* 
+#[derive(Debug, PartialEq)]
 pub enum Response {
     Ok(u16),
     BadRequest,
     Conflict,
-    Error
+    Error,
+}
+*/
+pub struct Response {
+    pub number: u16,
+    pub name: String,
+    pub types: Vec<String>,
 }
 
 pub enum Error {
@@ -24,14 +31,18 @@ pub enum Error {
     Unknown,
 }
 
-pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<u16,Error> {
+pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Error> {
     match (
         PokemonNumber::try_from(req.number),
         PokemonName::try_from(req.name),
         PokemonTypes::try_from(req.types),
     ) {
         (Ok(number), Ok(names), Ok(types)) => match repo.insert(number, names, types) {
-            Ok(number) => Ok(u16::from(number)),
+            Ok(p) => Ok( Response {
+                number: u16::from(p.number),
+                name: String::from(p.name),
+                types: Vec::<String>::from(p.types),
+            }),
             Err(InsertError::Conflict) => Err(Error::Conflict),
             Err(InsertError::Unknown) => Err(Error::Unknown),
         },
@@ -41,16 +52,17 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<u16,Error> {
 
 #[cfg(test)]
 mod tests {
+    use core::num;
+
     use crate::repositories::pokemon::InMemoryRepository;
 
     use super::*;
 
     #[test]
     fn it_should_return_the_pokemon_number_otherwise() {
-        let repo = Arc::new(InMemoryRepository::new());
-        let number = 25;
+        let repo = Arc::new(InMemoryRepository::new());        
         let req = Request {
-            number,
+            number: 25,
             name: String::from("Pikachu"),
             types: vec![String::from("Electric")],
         };
@@ -58,13 +70,21 @@ mod tests {
         let res = execute(repo, req);
 
         match res {
-            Ok(res_number) => assert_eq!(res_number, number),
+            Ok(Response {
+                number,
+                name,
+                types,
+            }) => {
+                assert_eq!(number, 25);
+                assert_eq!(name, String::from("Pikachu"));
+                assert_eq!(types, vec![String::from("Electric")]);
+            },
             _ => unreachable!(),
-        };        
+        };
     }
-    
+
     #[test]
-    fn urn_a_bad_request_error_when_request_is_invalid() {
+    fn it_should_return_a_bad_request_error_when_request_is_invalid() {
         let repo = Arc::new(InMemoryRepository::new());
         let req = Request {
             number: 25,
@@ -114,7 +134,7 @@ mod tests {
         let res = execute(repo, req);
 
         match res {
-            Err(Error::Unknown) => {},
+            Err(Error::Unknown) => {}
             _ => unreachable!(),
         }
     }

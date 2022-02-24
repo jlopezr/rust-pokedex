@@ -7,7 +7,7 @@ pub enum InsertError {
 }
 
 pub trait Repository: Send + Sync {
-    fn insert(&self, number: PokemonNumber, name: PokemonName, types: PokemonTypes) -> Result<PokemonNumber, InsertError>;
+    fn insert(&self, number: PokemonNumber, name: PokemonName, types: PokemonTypes) -> Result<Pokemon, InsertError>;
 }
 
 pub struct InMemoryRepository {
@@ -31,7 +31,7 @@ impl InMemoryRepository {
 }
 
 impl Repository for InMemoryRepository {
-    fn insert(&self, number: PokemonNumber, name: PokemonName, types: PokemonTypes) -> Result<PokemonNumber, InsertError> {
+    fn insert(&self, number: PokemonNumber, name: PokemonName, types: PokemonTypes) -> Result<Pokemon, InsertError> {
         if self.error {
             return Err(InsertError::Unknown);
         }
@@ -45,8 +45,8 @@ impl Repository for InMemoryRepository {
             return Err(InsertError::Conflict);
         }
         
-        let number_clone = number.clone();
-        lock.push(Pokemon::new(number_clone, name, types));
-        Ok(number)
+        let pokemon = Pokemon::new(number, name, types);        
+        lock.push(pokemon.clone());
+        Ok(pokemon)
     }
 }
