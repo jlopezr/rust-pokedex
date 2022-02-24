@@ -1,35 +1,23 @@
-use crate::{
-    domain::entities::PokemonNumber,
-    repositories::pokemon::{FetchOneError, Repository},
-};
+use super::entities::PokemonNumber;
+use crate::repositories::pokemon::{DeleteError, Repository};
 use std::sync::Arc;
 
 pub struct Request {
     pub number: u16,
 }
 
-pub struct Response {
-    pub number: u16,
-    pub name: String,
-    pub types: Vec<String>,
-}
-
 pub enum Error {
-    Unknown,
     BadRequest,
     NotFound,
+    Unknown,
 }
 
-pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Error> {
+pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<(), Error> {
     match PokemonNumber::try_from(req.number) {
-        Ok(number) => match repo.fetch_one(number) {
-            Ok(p) => Ok(Response {
-                number: u16::from(p.number),
-                name: String::from(p.name),
-                types: Vec::<String>::from(p.types),
-            }),
-            Err(FetchOneError::NotFound) => Err(Error::NotFound),
-            Err(FetchOneError::Unknown) => Err(Error::Unknown),
+        Ok(number) => match repo.delete(number) {
+            Ok(()) => Ok(()),
+            Err(DeleteError::NotFound) => Err(Error::NotFound),
+            Err(DeleteError::Unknown) => Err(Error::Unknown),
         },
         _ => Err(Error::BadRequest),
     }
@@ -37,19 +25,13 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Erro
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use super::*;
     use crate::{
         domain::entities::{PokemonName, PokemonTypes},
         repositories::pokemon::InMemoryRepository,
     };
-
-    impl Request {
-        fn new(number: PokemonNumber) -> Self {
-            Self {
-                number: u16::from(number),
-            }
-        }
-    }
 
     #[test]
     fn it_should_return_an_unknown_error_when_an_unexpected_error_happens() {
@@ -91,7 +73,7 @@ mod tests {
     }
 
     #[test]
-    fn it_should_return_the_pokemon_otherwise() {
+    fn it_should_return_ok_otherwise() {
         let repo = Arc::new(InMemoryRepository::new());
         repo.insert(
             PokemonNumber::pikachu(),
@@ -104,12 +86,16 @@ mod tests {
         let res = execute(repo, req);
 
         match res {
-            Ok(res) => {
-                assert_eq!(res.number, u16::from(PokemonNumber::pikachu()));
-                assert_eq!(res.name, String::from(PokemonName::pikachu()));
-                assert_eq!(res.types, Vec::<String>::from(PokemonTypes::pikachu()));
-            }
+            Ok(()) => {}
             _ => unreachable!(),
         };
+    }
+
+    impl Request {
+        fn new(number: PokemonNumber) -> Self {
+            Self {
+                number: u16::from(number),
+            }
+        }
     }
 }

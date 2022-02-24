@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use repositories::pokemon::InMemoryRepository;
+use std::sync::Arc;
 
 mod api;
 mod domain;

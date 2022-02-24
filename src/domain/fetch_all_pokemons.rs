@@ -1,6 +1,5 @@
+use crate::repositories::pokemon::{FetchAllError, Repository};
 use std::sync::Arc;
-
-use crate::repositories::pokemon::{Repository, FetchAllError};
 
 pub enum Error {
     Unknown,

@@ -42,7 +42,7 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Erro
 
 #[cfg(test)]
 mod tests {
-    use crate::{repositories::pokemon::InMemoryRepository};
+    use crate::repositories::pokemon::InMemoryRepository;
 
     use super::*;
 
@@ -105,7 +105,8 @@ mod tests {
             PokemonNumber::pikachu(),
             PokemonName::pikachu(),
             PokemonTypes::pikachu(),
-        ).ok();
+        )
+        .ok();
 
         let req = Request::new(
             PokemonNumber::pikachu(),
