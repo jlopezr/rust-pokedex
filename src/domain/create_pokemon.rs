@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::domain::entities::{PokemonName, PokemonNumber, PokemonTypes};
-use crate::repositories::pokemon::{Repository, Insert};
+use crate::repositories::pokemon::{Repository, InsertError};
 
 pub struct Request {
     pub number: u16,
@@ -31,9 +31,9 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<u16,Error> {
         PokemonTypes::try_from(req.types),
     ) {
         (Ok(number), Ok(names), Ok(types)) => match repo.insert(number, names, types) {
-            Insert::Ok(number) => Ok(u16::from(number)),
-            Insert::Conflict => Err(Error::Conflict),
-            Insert::Error => Err(Error::Unknown),
+            Ok(number) => Ok(u16::from(number)),
+            Err(InsertError::Conflict) => Err(Error::Conflict),
+            Err(InsertError::Unknown) => Err(Error::Unknown),
         },
         _ => Err(Error::BadRequest),
     }
