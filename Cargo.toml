@@ -12,3 +12,4 @@ serde_json = "1.0.79"
 clap = { version = "3.1.2", features = ["cargo"] }
 dialoguer = "0.10.0"
 rusqlite = "0.26.0"
+ureq = { version = "2.2.0", features = ["json"] }
