@@ -1,5 +1,3 @@
-use std::str::ParseBoolError;
-
 #[derive(PartialEq, Clone)]
 pub struct PokemonNumber(u16);
 
