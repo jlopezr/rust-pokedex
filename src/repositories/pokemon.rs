@@ -22,6 +22,7 @@ impl InMemoryRepository {
         Self { error: false, pokemons }
     }
 
+    #[cfg(test)]
     pub fn with_error(self) -> Self {
         Self {
             error: true,

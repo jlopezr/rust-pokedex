@@ -3,22 +3,22 @@ use std::sync::Arc;
 use crate::domain::entities::{PokemonName, PokemonNumber, PokemonTypes};
 use crate::repositories::pokemon::{Repository, Insert};
 
-struct Request {
-    number: u16,
-    name: String,
-    types: Vec<String>,
+pub struct Request {
+    pub number: u16,
+    pub name: String,
+    pub types: Vec<String>,
 }
 
 #[derive(Debug)]
 #[derive(PartialEq)]
-enum Response {
+pub enum Response {
     Ok(u16),
     BadRequest,
     Conflict,
     Error
 }
 
-fn execute(repo: Arc<dyn Repository>, req: Request) -> Response {
+pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Response {
     match (
         PokemonNumber::try_from(req.number),
         PokemonName::try_from(req.name),
