@@ -1,4 +1,4 @@
-use crate::repositories::pokemon::{FetchAllError, Repository};
+use crate::repositories::{FetchAllError, Repository};
 use std::sync::Arc;
 
 pub enum Error {
@@ -31,7 +31,7 @@ mod tests {
     use super::*;
     use crate::{
         domain::entities::{PokemonName, PokemonNumber, PokemonTypes},
-        repositories::pokemon::InMemoryRepository,
+        repositories::in_memory_repository::InMemoryRepository,
     };
 
     #[test]

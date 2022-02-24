@@ -1,6 +1,6 @@
 use crate::{
     domain::entities::PokemonNumber,
-    repositories::pokemon::{FetchOneError, Repository},
+    repositories::{FetchOneError, Repository},
 };
 use std::sync::Arc;
 
@@ -40,7 +40,7 @@ mod tests {
     use super::*;
     use crate::{
         domain::entities::{PokemonName, PokemonTypes},
-        repositories::pokemon::InMemoryRepository,
+        repositories::in_memory_repository::InMemoryRepository,
     };
 
     impl Request {

@@ -1,4 +1,4 @@
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use std::sync::Arc;
 
 mod create_pokemon;

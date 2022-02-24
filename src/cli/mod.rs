@@ -1,4 +1,4 @@
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use dialoguer::{theme::ColorfulTheme, Input, MultiSelect, Select};
 use std::sync::Arc;
 

@@ -1,5 +1,5 @@
 use crate::api::Status;
-use crate::{domain::fetch_all_pokemons, repositories::pokemon::Repository};
+use crate::{domain::fetch_all_pokemons, repositories::Repository};
 use serde::Serialize;
 use std::sync::Arc;
 

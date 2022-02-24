@@ -1,7 +1,7 @@
-use std::sync::Arc;
-
 use crate::domain::entities::{PokemonName, PokemonNumber, PokemonTypes};
-use crate::repositories::pokemon::{InsertError, Repository};
+use crate::repositories::InsertError;
+use crate::repositories::Repository;
+use std::sync::Arc;
 
 pub struct Request {
     pub number: u16,
@@ -42,7 +42,7 @@ pub fn execute(repo: Arc<dyn Repository>, req: Request) -> Result<Response, Erro
 
 #[cfg(test)]
 mod tests {
-    use crate::repositories::pokemon::InMemoryRepository;
+    use crate::repositories::in_memory_repository::InMemoryRepository;
 
     use super::*;
 

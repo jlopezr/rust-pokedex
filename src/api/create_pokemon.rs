@@ -1,6 +1,6 @@
 use crate::api::Status;
 use crate::domain::create_pokemon::{self, Error};
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 

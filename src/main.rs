@@ -1,11 +1,14 @@
-use repositories::pokemon::{InMemoryRepository, Repository, SqliteRepository, AirtableRepository};
-use std::sync::Arc;
 use clap::{Arg, Command, Values};
+use repositories::{
+    airtable_repository::AirtableRepository, in_memory_repository::InMemoryRepository,
+    sqlite_repository::SqliteRepository, Repository,
+};
+use std::sync::Arc;
 
 mod api;
+mod cli;
 mod domain;
 mod repositories;
-mod cli;
 
 #[macro_use]
 extern crate rouille;
@@ -15,7 +18,7 @@ extern crate serde;
 #[macro_use]
 extern crate clap;
 
-fn main() {        
+fn main() {
     let matches = Command::new(crate_name!())
         .version(crate_version!())
         .author(crate_authors!())
@@ -30,11 +33,10 @@ fn main() {
 
     let repo = build_repo(matches.value_of("sqlite"), matches.values_of("airtable"));
 
-
     match matches.occurrences_of("cli") {
         0 => api::serve("localhost:8000", repo),
         _ => cli::run(repo),
-    }        
+    }
 }
 
 fn build_repo(sqlite_value: Option<&str>, airtable_values: Option<Values>) -> Arc<dyn Repository> {
@@ -46,7 +48,7 @@ fn build_repo(sqlite_value: Option<&str>, airtable_values: Option<Values>) -> Ar
             }
         }
     }
-    
+
     if let Some(path) = sqlite_value {
         match SqliteRepository::try_new(path) {
             Ok(repo) => return Arc::new(repo),

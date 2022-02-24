@@ -1,5 +1,5 @@
 use super::Status;
-use crate::{domain::delete_pokemon, repositories::pokemon::Repository};
+use crate::{domain::delete_pokemon, repositories::Repository};
 use std::sync::Arc;
 
 pub fn serve(repo: Arc<dyn Repository>, number: u16) -> rouille::Response {

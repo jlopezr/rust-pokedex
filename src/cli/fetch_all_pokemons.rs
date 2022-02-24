@@ -1,5 +1,5 @@
 use crate::domain::fetch_all_pokemons;
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use std::sync::Arc;
 
 #[derive(Debug)]

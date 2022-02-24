@@ -1,5 +1,5 @@
 use super::entities::PokemonNumber;
-use crate::repositories::pokemon::{DeleteError, Repository};
+use crate::repositories::{DeleteError, Repository};
 use std::sync::Arc;
 
 pub struct Request {
@@ -30,7 +30,7 @@ mod tests {
     use super::*;
     use crate::{
         domain::entities::{PokemonName, PokemonTypes},
-        repositories::pokemon::InMemoryRepository,
+        repositories::in_memory_repository::InMemoryRepository,
     };
 
     #[test]

@@ -1,6 +1,6 @@
 use crate::cli::prompt_number;
 use crate::domain::delete_pokemon;
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use std::sync::Arc;
 
 pub fn run(repo: Arc<dyn Repository>) {

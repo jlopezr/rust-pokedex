@@ -1,6 +1,6 @@
 use crate::cli::{prompt_name, prompt_number, prompt_types};
 use crate::domain::create_pokemon;
-use crate::repositories::pokemon::Repository;
+use crate::repositories::Repository;
 use std::sync::Arc;
 
 #[derive(Debug)]
