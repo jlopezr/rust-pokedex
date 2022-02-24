@@ -4,6 +4,7 @@ use crate::repositories::pokemon::Repository;
 
 mod health;
 mod create_pokemon;
+mod fetch_all_pokemons;
 
 enum Status {
     BadRequest,

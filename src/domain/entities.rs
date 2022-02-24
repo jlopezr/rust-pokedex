@@ -1,4 +1,4 @@
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, PartialOrd, Ord, Eq)]
 pub struct PokemonNumber(u16);
 
 impl TryFrom<u16> for PokemonNumber {
@@ -120,6 +120,10 @@ impl Pokemon {
 impl PokemonNumber {
     pub fn pikachu() -> Self {
         Self(25)
+    }
+
+    pub fn charmander() -> Self {
+        Self(4)
     }
 }
 
